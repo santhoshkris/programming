@@ -1,0 +1,7 @@
+FROM python:3.8-slim
+RUN useradd --create-home --shell /bin/bash kclk_user
+WORKDIR /home/kclk_user
+COPY ./keycloak-client-utility/ ./
+RUN pip3 install --no-cache-dir -r config/requirements.txt
+USER kclk_user
+CMD ["bash"]

@@ -1,0 +1,120 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "JOI Energy API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/readings/read/{smartMeterId}": {
+            "get": {
+                "tags": [
+                    "getReadings"
+                ],
+                "summary": "Get all electricity readings",
+                "description": "Returns list of electricity readings",
+                "operationId": "getReading",
+                "parameters": [
+                    {
+                        "name": "smartMeterId",
+                        "in": "path",
+                        "description": "SmartMeter id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "time": {
+                                                "type": "string",
+                                                "example": "2020-11-29T08:00:00Z"
+                                            },
+                                            "reading": {
+                                                "type": "number",
+                                                "format": "double",
+                                                "example": 0.0621
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/readings/store": {
+            "post": {
+                "tags": [
+                    "storeReadings"
+                ],
+                "summary": "Store electricity readings for a smartmeter",
+                "operationId": "21d391e72fd00142d35ac4d527e6619d",
+                "requestBody": {
+                    "description": "SmartMeter and Electricity Readings",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "smartMeterId": {
+                                        "type": "string",
+                                        "example": "smart-meter-1"
+                                    },
+                                    "electricityReadings": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "time": {
+                                                    "type": "string",
+                                                    "example": "2020-11-29T08:00:00Z"
+                                                },
+                                                "reading": {
+                                                    "type": "number",
+                                                    "format": "double",
+                                                    "example": 0.0567
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "example": [
+                                            {
+                                                "time": "<time>",
+                                                "reading": "<reading>"
+                                            },
+                                            {
+                                                "time": "2020-11-29T08:00:00Z",
+                                                "reading": 0.0503
+                                            }
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

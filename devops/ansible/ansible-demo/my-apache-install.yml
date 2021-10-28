@@ -1,0 +1,10 @@
+---
+- hosts: dev2
+  become: true
+  tasks:
+    - yum:
+        name:
+          - httpd
+        state: present
+    - service: name=httpd state=started enabled=true
+    - raw: "echo Hello from the webserver on AWS EC2 instance | sudo tee /var/www/html/index.html"

@@ -1,0 +1,6 @@
+---
+- hosts: qa
+  tasks:
+    - name: Run hostvars
+      action: ping
+    - debug: var=hostvars
