@@ -53,46 +53,59 @@ def displayProgressBar():
                          suffix='Complete', length=50)
 
 
-def list_all_synthetic_tests(config, noprint):
+def list_synthetic_tests(config, scope, noprint):
     """List all the synthetic tests."""
     with ApiClient(config) as api_client:
         api_instance = synthetics_api.SyntheticsApi(api_client)
         testIDs = []
+        tests_in_scope = []
         # example, this endpoint has no required or optional parameters
         try:
             # Get the list of all tests
             api_response = api_instance.list_tests()
             # pprint(api_response)
-            if not noprint:
-                print("-"*80)
-                print(f"Total #tests configured is :,\
-                {len(api_response['tests'])}")
-                print("Details are :")
-                print("-"*80)
             for i, test in enumerate(api_response['tests']):
                 if not noprint:
-                    print("-"*80)
-                    print(f"Test #{i+1}")
-                    print("-"*80)
-                    print(f"Name: {test['name']}")
-                    print(f"ID: {test['public_id']}")
-                if i != 2:
-                    testIDs.append(test['public_id'])
-                if not noprint:
-                    print(f"TYPE: {test['type']}")
-                    print(f"STATUS: {test['status']}")
-                    print(f"MESSAGE TO: {test['message']}")
-                    print("*"*80)
-            return testIDs
+                    if scope == 'live' and str(test['status']) == 'live':
+                        tests_in_scope.append(test)
+                    elif scope == 'paused' and str(test['status']) == 'paused':
+                        tests_in_scope.append(test)
+                    elif scope == 'all':
+                        tests_in_scope.append(test)
+                else:
+                    if i != 2:
+                        testIDs.append(test['public_id'])
+            if noprint:
+                return testIDs
+
+            print("-"*80)
+            if scope == 'all':
+                print(f"Total #tests configured is : \
+                {len(tests_in_scope)}")
+            else:
+                print(f"Total {scope} tests are : \
+                {len(tests_in_scope)}")
+            print("Details are :")
+            print("-"*80)
+            for i, t in enumerate(tests_in_scope):
+                print("-"*80)
+                print(f"Test #{i+1}")
+                print("-"*80)
+                print(f"Name: {t['name']}")
+                print(f"ID: {t['public_id']}")
+                print(f"TYPE: {t['type']}")
+                print(f"STATUS: {t['status']}")
+                print(f"MESSAGE TO: {t['message']}")
+                print("*"*80)
         except ApiException as e:
             print("Exception when calling SyntheticsApi->list_tests: %s\n" % e)
 
 
 def pause_unpause_all_synthetic_tests(config, state):
     """Pause/Unpause all Synthetic tests."""
-    testIDs = list_all_synthetic_tests(config, True)
-    # print(testIDs)
-    pause_unpause_synthetic_tests(config, testIDs, state)
+    testIDs = list_synthetic_tests(config, all, True)
+    print(testIDs)
+    #pause_unpause_synthetic_tests(config, testIDs, state)
 
 
 def pause_unpause_synthetic_tests(config, testIDs, state):
@@ -104,14 +117,14 @@ def pause_unpause_synthetic_tests(config, testIDs, state):
                 public_id = id
                 print("Test ID is : ", public_id)
                 print("State to set is : ", state)
-                body = SyntheticsUpdateTestPauseStatusPayload(
-                    new_status=SyntheticsTestPauseStatus(state),
-                )
-                try:
-                    api_response = api_instance.update_test_pause_status(public_id, body)
-                    pprint(api_response)
-                except ApiException as e:
-                    print("Exception when calling SyntheticsApi->update_test_pause_status: %s\n" % e)
+                # body = SyntheticsUpdateTestPauseStatusPayload(
+                #     new_status=SyntheticsTestPauseStatus(state),
+                # )
+                # try:
+                #     api_response = api_instance.update_test_pause_status(public_id, body)
+                #     pprint(api_response)
+                # except ApiException as e:
+                #     print("Exception when calling SyntheticsApi->update_test_pause_status: %s\n" % e)
 
 
 def list_downtimes(config, scope):
@@ -119,7 +132,7 @@ def list_downtimes(config, scope):
     with ApiClient(config) as api_client:
         api_instance = downtimes_api.DowntimesApi(api_client)
         current_only = False
-        if scope == 'active':
+        if scope == 'live':
             current_only = True
         try:
             # Get all downtimes
@@ -223,8 +236,9 @@ def argParserConfig():
     # create parser object
     parser = argparse.ArgumentParser(description="DataDog Client Utility!")
     # defining arguments for parser object
-    parser.add_argument("--list_all_syn_tests", action='store_true',
-                        help="Get all Synthetic Tests.")
+    parser.add_argument("--list_syn_tests",
+                        choices=['all', 'live', 'paused'],
+                        help="List Synthetic Tests.")
     parser.add_argument("--pause_all_syn_tests", action='store_true',
                         help="Pause all Synthetic tests.")
     parser.add_argument("--unpause_all_syn_tests", action='store_true',
@@ -236,21 +250,25 @@ def argParserConfig():
                         metavar="test_id", default=None,
                         help="UnPause a Synthetic Test")
     parser.add_argument("--list_downtimes",
-                        choices=['all', 'active', 'scheduled'],
-                        help="Get all currently active Downtimes.")
+                        choices=['all', 'live', 'scheduled'],
+                        help="List Downtimes.")
     parser.add_argument("--schedule_downtime", type=str, nargs=2,
                         metavar=("start", "end"),
                         help="Schedule a Downtime by specifying,\
                         start and end time")
+    parser.add_argument("--cancel_downtime", type=str, nargs=1,
+                        metavar="downtime_id", default=None,
+                        help="Cancel a Downtime")
     return parser
 
 
 def call_methods(args, config):
     """Invoke the menthods based on the args passed."""
     # calling functions depending on type of argument
-    if args.list_all_syn_tests:
-        print("Fetching all Synthetic Tests")
-        list_all_synthetic_tests(config, False)
+    if args.list_syn_tests:
+        print(f"Fetching {args.list_syn_tests.upper()} Synthetic Tests")
+        print()
+        list_synthetic_tests(config, args.list_syn_tests, False)
     elif args.pause_all_syn_tests:
         print("Pausing all Synthetic Tests")
         print()
