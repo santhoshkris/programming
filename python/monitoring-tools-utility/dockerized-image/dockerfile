@@ -1,0 +1,7 @@
+FROM python:3.9-slim
+RUN useradd --create-home --shell /bin/bash mtools_user
+WORKDIR /home/mtools_user
+COPY ./mtools-client-utility/ ./
+RUN pip3 install --no-cache-dir -r config/requirements.txt
+USER mtools_user
+CMD ["bash"]

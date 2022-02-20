@@ -10,7 +10,6 @@ from colorama import Back, Style
 from simple_term_menu import TerminalMenu
 import requests
 import json
-from configparser import ConfigParser
 from pprint import pprint
 from datetime import datetime
 from datadog_api_client.v1 import ApiClient, ApiException, Configuration
@@ -37,25 +36,6 @@ myjs_hostids = [
 ]
 
 colorama.init(autoreset=True)
-
-
-def config(filename='./config/mtools_config.ini', section='datadog'):
-    """Read in the config file to fetch the required API KEY details."""
-    # create a parser
-    parser = ConfigParser()
-    # read config file
-    parser.read(filename)
-
-    # get section, default to postgresql
-    details = {}
-    if parser.has_section(section):
-        params = parser.items(section)
-        for param in params:
-            details[param[0]] = param[1]
-    else:
-        raise Exception(f'Section {section} not found in the {filename} file')
-
-    return details
 
 
 # Print iterations progress
