@@ -3,6 +3,7 @@
 """CLI Client utility for interacting with DataDog/Wormly/Zabbix."""
 
 import os
+from dotenv import load_dotenv
 import time
 import pytz
 import colorama
@@ -10,6 +11,7 @@ from colorama import Back, Style
 from simple_term_menu import TerminalMenu
 import requests
 import json
+# from configparser import ConfigParser
 from pprint import pprint
 from datetime import datetime
 from datadog_api_client.v1 import ApiClient, ApiException, Configuration
@@ -20,7 +22,7 @@ from datadog_api_client.v1.api import downtimes_api
 from datadog_api_client.v1.api.downtimes_api import DowntimesApi
 from datadog_api_client.v1.model.downtime import Downtime
 
-key = "kX5bT8fE"
+# key = "kX5bT8fE"
 myjs_hostids = [
     "36304",  # MYJS Docswap - ds-mfs (SG2)
     "43899",  # MYJS Docswap - ds-mfs (SG2) Load Average
@@ -36,6 +38,25 @@ myjs_hostids = [
 ]
 
 colorama.init(autoreset=True)
+
+
+# def config_reader(filename='./config/mtools_config.ini', section='wormly'):
+#     """Read in the config file to fetch the required API KEY details."""
+#     # create a parser
+#     parser = ConfigParser()
+#     # read config file
+#     parser.read(filename)
+
+#     # get section, default to postgresql
+#     details = {}
+#     if parser.has_section(section):
+#         params = parser.items(section)
+#         for param in params:
+#             details[param[0]] = param[1]
+#     else:
+#         raise Exception(f'Section {section} not found in the {filename} file')
+
+#     return details
 
 
 # Print iterations progress
@@ -74,7 +95,7 @@ def get_wormly_downtimes(hostids, noprint):
     results = []
     print("-"*80)
     for host in hostids:
-        url = "https://api.wormly.com/?key=" + key + "&cmd=getScheduledDowntimePeriods&response=json&hostid=" + host
+        url = "https://api.wormly.com/?key=" + os.getenv('key') + "&cmd=getScheduledDowntimePeriods&response=json&hostid=" + host
 
         payload = {}
         headers = {
@@ -103,7 +124,7 @@ def get_wormly_downtimes(hostids, noprint):
 def set_wormly_downtimes(hostids, start, end, timezone, recurrence, on):
     """Set downtimes in Wormly for the HostID(s)."""
     for host in hostids:
-        url = "https://api.wormly.com/?key=" + key + "&cmd=setScheduledDowntimePeriod&response=json&hostid=" + host + "&start=" + start + "&end=" + end + "&timezone=" + timezone + "&recurrence=" + recurrence + "&on=" + on
+        url = "https://api.wormly.com/?key=" + os.getenv('key') + "&cmd=setScheduledDowntimePeriod&response=json&hostid=" + host + "&start=" + start + "&end=" + end + "&timezone=" + timezone + "&recurrence=" + recurrence + "&on=" + on
 
         payload = {}
         headers = {
@@ -544,13 +565,13 @@ def display_menu(config):
                 wormly_sel = wormly_menu.show()
                 if wormly_sel == 0:
                     print("Getting all latest downtimes...")
-                    get_wormly_downtimes(myjs_hostids)
+                    get_wormly_downtimes(myjs_hostids, False)
                     input("Press Enter to Continue...")
                 elif wormly_sel == 1:
                     hostid = input("Type in HostID [ OR Press Enter to return back to Menu ] : \n")
                     if hostid == "":
                         continue
-                    get_wormly_downtimes([hostid])
+                    get_wormly_downtimes([hostid], False)
                     input("Press Enter to Continue...")
                 elif wormly_sel == 2:
                     print("Schedule Downtimes for all HostIDs...")
@@ -625,6 +646,14 @@ def display_menu(config):
 
 def main():
     """Entry point of the application."""
+
+    global WORMLY_CONFIG
+
+    env_file = os.path.dirname(os.path.realpath(__file__)) + os.sep + "config/.env.mtools"
+    # ini_file = os.path.dirname(os.path.realpath(__file__)) + os.sep + "config/mtools_config.ini"
+
+    load_dotenv(env_file)
+
     print_header()
 
     configuration = Configuration()

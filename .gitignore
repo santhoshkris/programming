@@ -1,0 +1,3 @@
+/python/monitoring-tools-utility/config/.env.mtools
+/python/monitoring-tools-utility/dockerized-image/mtools-client-utility/config/.env.mtools
+/python/monitoring-tools-utility/test/.env
