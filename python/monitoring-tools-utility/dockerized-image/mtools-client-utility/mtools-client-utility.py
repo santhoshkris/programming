@@ -22,7 +22,6 @@ from datadog_api_client.v1.api import downtimes_api
 from datadog_api_client.v1.api.downtimes_api import DowntimesApi
 from datadog_api_client.v1.model.downtime import Downtime
 
-# key = "kX5bT8fE"
 myjs_hostids = [
     "36304",  # MYJS Docswap - ds-mfs (SG2)
     "43899",  # MYJS Docswap - ds-mfs (SG2) Load Average
@@ -646,11 +645,9 @@ def display_menu(config):
 
 def main():
     """Entry point of the application."""
-
     global WORMLY_CONFIG
 
-    env_file = os.path.dirname(os.path.realpath(__file__)) + os.sep + "config/.env.mtools"
-    # ini_file = os.path.dirname(os.path.realpath(__file__)) + os.sep + "config/mtools_config.ini"
+    env_file = os.path.dirname(os.path.realpath(__file__)) + os.sep + "config/env.mtools"
 
     load_dotenv(env_file)
 
