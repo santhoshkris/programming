@@ -36,6 +36,13 @@ myjs_hostids = [
     "58102",  # MYJSDB centralmyjs transfer
 ]
 
+cfs_hostids = [
+    "70542",  # Jobsdb TH MSite
+    "54589",  # Jobsdb TH DesktopSite
+    "70641",  # Jobsdb MobileAppApi
+    "54252",  # Jobsdb HK DesktopSite
+]
+
 colorama.init(autoreset=True)
 
 
@@ -390,7 +397,7 @@ def display_menu(config):
     )
 
     wormly_menu_title = title + "=> Wormly\n" + "*" * 46
-    wormly_menu_items = ["Get All Downtimes (latest)", "Get Downtimes By HostID",
+    wormly_menu_items = ["Get All Downtimes", "Get Downtimes By HostID",
                          "Schedule All Downtimes", "Schedule Downtime for HostID", "Back to Main Menu", "Quit"]
     wormly_menu_back = False
     wormly_menu = TerminalMenu(
@@ -563,8 +570,18 @@ def display_menu(config):
             while not wormly_menu_back:
                 wormly_sel = wormly_menu.show()
                 if wormly_sel == 0:
-                    print("Getting all latest downtimes...")
-                    get_wormly_downtimes(myjs_hostids, False)
+                    which_hostids = input("Type 1 for MyJS, 2 for CFS, 3 for Both [ OR Press Enter to return back to Menu  ]: \n")
+                    if which_hostids == "1":
+                        print("Getting all latest downtimes for MyJS...")
+                        get_wormly_downtimes(myjs_hostids, False)
+                    elif which_hostids == "2":
+                        print("Getting all latest downtimes for CFS...")
+                        get_wormly_downtimes(cfs_hostids, False)
+                    elif which_hostids == "3":
+                        print("Getting all latest downtimes for both MyJS & CFS...")
+                        get_wormly_downtimes(myjs_hostids+cfs_hostids, False)
+                    else:
+                        continue
                     input("Press Enter to Continue...")
                 elif wormly_sel == 1:
                     hostid = input("Type in HostID [ OR Press Enter to return back to Menu ] : \n")
@@ -586,18 +603,30 @@ def display_menu(config):
                         start = results[0][myjs_hostids[0]]['start']
                     if start == '1':
                         continue
-                    end = input(f"Type in Start time [{results[0][myjs_hostids[0]]['end']}]  \n[ OR Press Enter to accept the default value]\n[ OR Type 1 to return back to Menu] : \n")
+                    end = input(f"Type in End time [{results[0][myjs_hostids[0]]['end']}]  \n[ OR Press Enter to accept the default value]\n[ OR Type 1 to return back to Menu] : \n")
                     if end == "":
                         end = results[0][myjs_hostids[0]]['end']
                     if end == '1':
                         continue
-                    timezone = input(f"Type in Start time [{results[0][myjs_hostids[0]]['timezone']}]  \n[ OR Press Enter to accept the default value]\n[ OR Type 1 to return back to Menu] : \n")
+                    timezone = input(f"Type in TimeZone [{results[0][myjs_hostids[0]]['timezone']}]  \n[ OR Press Enter to accept the default value]\n[ OR Type 1 to return back to Menu] : \n")
                     if timezone == "":
                         timezone = results[0][myjs_hostids[0]]['timezone']
                     if timezone == '1':
                         continue
                     # print(on, start, end, timezone)
-                    set_wormly_downtimes(myjs_hostids, start, end, timezone, "ONCEONLY", on)
+                    print()
+                    which_hostids = input("Type 1 for MyJS, 2 for CFS, 3 for Both [ OR Press Enter to return back to Menu  ]: \n")
+                    if which_hostids == "1":
+                        print("Setting downtimes for MyJS...")
+                        set_wormly_downtimes(myjs_hostids, start, end, timezone, "ONCEONLY", on)
+                    elif which_hostids == "2":
+                        print("Setting downtimes for CFS...")
+                        set_wormly_downtimes(cfs_hostids, start, end, timezone, "ONCEONLY", on)
+                    elif which_hostids == "3":
+                        print("Setting downtimes for both MyJS & CFS...")
+                        set_wormly_downtimes(myjs_hostids+cfs_hostids, start, end, timezone, "ONCEONLY", on)
+                    else:
+                        continue
                     input("Press Enter to Continue...")
                 elif wormly_sel == 3:
                     print("Schedule Downtimes for HostID")
