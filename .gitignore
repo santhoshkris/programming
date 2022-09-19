@@ -2,3 +2,6 @@
 /python/monitoring-tools-utility/dockerized-image/mtools-client-utility/config/.env.mtools
 /python/monitoring-tools-utility/test/.env
 /python/monitoring-tools-utility/config/env.mtools
+.DS_Store
+.clj-kondo/
+.lsp/

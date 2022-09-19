@@ -1,0 +1,15 @@
+/Users/santhosh.k/programming/csharp/helloworld/bin/Debug/net6.0/helloworld
+/Users/santhosh.k/programming/csharp/helloworld/bin/Debug/net6.0/helloworld.deps.json
+/Users/santhosh.k/programming/csharp/helloworld/bin/Debug/net6.0/helloworld.runtimeconfig.json
+/Users/santhosh.k/programming/csharp/helloworld/bin/Debug/net6.0/helloworld.dll
+/Users/santhosh.k/programming/csharp/helloworld/bin/Debug/net6.0/ref/helloworld.dll
+/Users/santhosh.k/programming/csharp/helloworld/bin/Debug/net6.0/helloworld.pdb
+/Users/santhosh.k/programming/csharp/helloworld/obj/Debug/net6.0/helloworld.csproj.AssemblyReference.cache
+/Users/santhosh.k/programming/csharp/helloworld/obj/Debug/net6.0/helloworld.GeneratedMSBuildEditorConfig.editorconfig
+/Users/santhosh.k/programming/csharp/helloworld/obj/Debug/net6.0/helloworld.AssemblyInfoInputs.cache
+/Users/santhosh.k/programming/csharp/helloworld/obj/Debug/net6.0/helloworld.AssemblyInfo.cs
+/Users/santhosh.k/programming/csharp/helloworld/obj/Debug/net6.0/helloworld.csproj.CoreCompileInputs.cache
+/Users/santhosh.k/programming/csharp/helloworld/obj/Debug/net6.0/helloworld.dll
+/Users/santhosh.k/programming/csharp/helloworld/obj/Debug/net6.0/ref/helloworld.dll
+/Users/santhosh.k/programming/csharp/helloworld/obj/Debug/net6.0/helloworld.pdb
+/Users/santhosh.k/programming/csharp/helloworld/obj/Debug/net6.0/helloworld.genruntimeconfig.cache

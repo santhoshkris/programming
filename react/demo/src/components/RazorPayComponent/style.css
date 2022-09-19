@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400');
+body {
+    background: #2D3142;
+    font-family: 'Raleway', sans-serif;
+}
+
+
+/* Layout Styling */
+
+#container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 50px 0 150px 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+/* Button Styles */
+
+.button {
+    display: inline-flex;
+    height: 40px;
+    width: 250px;
+    border: 2px solid #BFC0C0;
+    margin: 20px 20px 20px 20px;
+    color: #BFC0C0;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: .8em;
+    letter-spacing: 1.5px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+a {
+    color: #BFC0C0;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+#razorpay-button {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#razorpay-button a {
+    position: relative;
+    left: 0;
+    transition: all .35s ease-Out;
+}
+
+#dub-arrow {
+    width: 100%;
+    height: 100%;
+    background: #BFC0C0;
+    left: -400px;
+    position: absolute;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .35s ease-Out;
+    bottom: 0;
+}
+
+#razorpay-button img {
+    width: 20px;
+    height: auto;
+}
+
+#razorpay-button:hover #dub-arrow {
+    left: 0;
+}
+
+#razorpay-button:hover a {
+    left: 150px;
+}
+
+@media screen and (min-width:1000px) {
+    h1 {
+        font-size: 2.2em;
+    }
+    #container {
+        width: 50%;
+    }
+}
