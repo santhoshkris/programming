@@ -27,6 +27,5 @@
          result #{}]
     (if (empty? remaining-coll)
       result
-      (let [[first & remaining ] remaining-coll]
+      (let [[first & remaining] remaining-coll]
         (recur remaining (into result (hash-set (f first))))))))
-
