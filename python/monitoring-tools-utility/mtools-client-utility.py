@@ -45,7 +45,6 @@ cfs_hostids = [
 
 colorama.init(autoreset=True)
 
-
 # def config_reader(filename='./config/mtools_config.ini', section='wormly'):
 #     """Read in the config file to fetch the required API KEY details."""
 #     # create a parser

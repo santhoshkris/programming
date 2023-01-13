@@ -1,0 +1,15 @@
+{
+  "name": "slackbot",
+  "version": "1.0.0",
+  "description": "StarWars Bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Santhosh K",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "slackbots": "^1.2.0"
+  }
+}
